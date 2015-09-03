@@ -1,0 +1,59 @@
+Moving the ba«
+Chapter 3: Hole In One 39
+Now that you've conquered deceleration, you can write the code to implement
+B a 1 1 's m o v e ( ) method. This method is the one your applet calls to
+advance the ball's position on each frame of the animation. Your move ( )
+method takes two parameters: The first parameter, bd , specifies the bounds
+of the applet. You need bd to detect when the ball needs to bounce off the
+edges of the applet so that it doesn't roll out of the applet's play field.
+The second parameter, f r i c t i o n , specifies how much to decelerate the
+ball for each frame of animation. You use f r i c t i o n to call d e c e 1 ( ) in order
+to update the ball's deceleration, like this:
+Calling d e c e 1 ( ) updates v e 1 to account for deceleration, after which you
+can add v e 1 to the ball's position to move the ball. You need to modify the
+ball's position in one other place in your code, so you may as well create a
+method in B a 1 1 for this purpose: You can call it a d d P o s ( ). a d d P o s ( ) needs
+to take a V e c 2 D object as its input parameter. When you call a d d V e c ( ) ,
+addVec ( ) should add the dx and dy values in the vector to the ball's
+position, like this:
+p~hlic void addPos (Vec2D vel) (
++= ve l. dx;
++-- vel .dy;
+After you code a d d V e c ( ) , you can add the code to m o v e ( ) to call it, like
+this:
+
+---------------------------------------------------------------------------------------
+When you call touches( ), you pass it two int parameters called mx and my to indicate where the user clicked. 
+You use these values to create a new Circ1e object located in the spot where the user clicked. 
+Then you can call Circle's dist( ) method to calculate the distance from this point to the center of the ball.
+If this distance is less than the ball's radius, touches( ) returns true, 
+indicating that the user has clicked the ball.
+---------------------------------------------------------------------------------------
+To actually make a putt, your applet calls a method in Ba11 called putt( ) and passes it a Point object called ptr 
+that indicates the location of the mouse when the mouse button is released. 
+Point is a class in java.awt. Creating a Point object (in this example, ptr) is a convenient way to pass
+x,y values as a single parameter. Using these values, putt( ) calls setVec( )
+to set the ball's ve1 variable in order to put the ball in motion. Here's the
+code for putt( ):
+
+Notice that the speed of the putt is defined as the difference between the
+mouse's position and the ball's position, divided by 20. Dividing by 20
+provides greater resolution for aiming the putt without imparting too much
+force to the ball. However, you can adjust this value to suit your own
+preferences.
+
+---------------------------------------------------------------------------------------
+Vectoring in
+When you animate the ball by adding the v e 1 vector to the ball's position,
+you use v e 1 to simulate the force of the putter acting on the ball and the
+ball's resulting momentum pushing it in a particular direction. The fictitious
+force pushing the ball to the center of the hole can also be represented by a
+vector. However, the effect of the hole doesn't replace v e 1 's effect on the
+ball. Instead, the hole's effect gets added to v e 1 and changes the direction of
+the force created by the ball's momentum.
+You can simulate the effect of combining two different forces by adding the
+vectors that represent those two forces. And, as Figure 3-5 shows, when you
+add two vectors, you get a new vector that represents their combined
+forces. The new vector can have a greater magnitude than the two vectors
+you add, or it can produce a vector that has an equal or lesser magnitude,
+depending on the values of the two vectors you add.

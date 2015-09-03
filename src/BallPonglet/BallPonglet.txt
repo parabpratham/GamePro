@@ -1,0 +1,98 @@
+The test i f ( ! mouse_i n ) checks to see whether the player is ready to play
+and has moved the mouse pointer into the control area (the area of the
+applet's screen that tracks the player's mouse movements - more about
+this later in the section "Entering the control zone"). After the player moves
+the mouse to the control area, the delay value counts down, and the code in
+the e 1 s e i f block serves the ball.
+------------------------------------------------------------------------------------
+The value s Loc computes a random location from which to serve the ball,
+and this value is passed to the constructor for Bal 1. This code is nearly
+identical to the B a 1 1 class in Chapter 1, except that it only checks for
+bounces off the left and right bounds. Here's the complete code:
+-------------------------------------------------------------------------------------
+The code in WA I T that serves the ball also calls two new methods rn d I n t ( )
+and rn d ( ) that generate random i n t and f 1 o a t values. WAI T uses these
+methods to generate a random velocity (speed) for the ball and to serve it
+from a random point along the top edge of the applet window. The
+r nd I n t (n n) method generates a random i n t (integer) between 0 and nn.
+The r n d (n n) method generates a random f 1 o a t (floating-point value) that
+is greater than or equal to 0 and less than nn. Here's how you need to write
+these two methods:
+----------------------------------------------------------------------------------
+The c h e c k Re t u r n ( ) may look a little complicated at first, but its main job is
+simply to check whether the ball hits the paddle. You use the same code to
+create a paddle for the player and also for the computer. The boolean
+parameter p 1 y r is t rue if c h e c k Re t u r n ( ) is checking the player's paddle;
+otherwise, it checks the computer's paddle.
+
+The code for the player's paddle is
+ball.y > (y - ball.radius)
+and the code for the computer's paddle is
+ball.y < (y + ball.radius)
+
+However, the game would be pretty boring if the ball simply reversed
+direction (dy value is reversed) and retraced its original path every time the
+player's paddle hit the ball. You can add code to tweak the dx value and
+apply a little English to the ball
+
+Finally, c h e c k Re t u r n ( ) returns one of three different parameter values, r 1,
+r2, or r3, depending on the results of its checks. c h e c k R e t u r n ( ) returns
+the value that is passed in r 1 if the ball HASN'T YET REACHED THE PADDLE, r 2 if
+THE BALL REACHED THE PADDLE AND THE PADDLE HIT THE BALL, and r3 if THE BALL
+REACHED THE PADDLE BUT THE PADDLE MISSED THE BALL.
+
+-----------------------------------------------------------------------------------
+Now that you've created the P a d d 1 e class, you can add code to call it. You
+need to call it to check the player's paddle when in the S E RV E state and to
+check the computer's paddle when in the RETU RN state. Here's the code you
+need to add to the SERVE case to call checkReturn ( ). This code goes in the
+S E RV E case in the switch statement because the S E RV E case is the case the
+code will call when g s t a t e equals S E R V E.
+
+When the player hits the ball, the call to checkReturn ( ) sets gstate to
+RETURN. If the player missed the ball, gstate is set to PGUTTER. When
+gstate is set to RETURN, the code also creates a new P a d d l e object for the
+computer to use to try and return the ball.
+
+-----------------------------------------------------------------------------------
+When the player hits the ball, the code in the S E R V E case instantiates a paddle
+for the computer and changes g s t ate to RETURN. You now need to put code
+in the RETURN case to control the computer's paddle. Here's that code:
+case RETURN:
+// Implement our simple-minded computer opponent
+i f ( Math.abs(gPaddle.x - ball.x) >= 1)
+gPaddle.move((int) (trackX += (gPaddle.x < ball.x ?
+1.5f : -1.5f)), table);
+// Check for ball in position for game to hit
+gstate = gPaddle.checkReturn(ball, false, RETURN, SERVE,
+GGUTTER);
+break;
+Chapter 2: Ponglet 25
+The code for the computer opponent simply tries to move the paddle to
+intercept the ball. However, the computer is limited in how fast it can move
+the paddle by the two constants 1. 5 f and -1 . 5 f. These constants are
+added or subtracted from the paddle position each animation tick in order
+to make the paddle attempt to track the ball.
+Set to 1. 5 f and -1 . 5f, the paddle can only move 1.5 pixels per tick in either
+direction. Make these constants larger if you want your computer opponent
+to be able to move the paddle faster and, therefore, be a more difficult
+opponent.
+-----------------------------------------------------------------------------------
+In the case where the player or the computer misses the ball, you need to
+wait until the ball moves off the table before serving the next ball. The
+P G U TT E R state waits for the computer's scoring ball to move off the player's
+side of the table. It then sets g s t a t e to G S C 0 R E to record the score.
+-----------------------------------------------------------------------------------
+After scoring a point, the P S C 0 R E case increments the player's score and
+checks whether the player has scored a total of 10 points (the criteria for
+declaring a winner). If the player has won, g s t a t e is set to P W 0 N. If the
+player has not yet reached a score of 10, g s t a t e is set back to W A I T to wait
+to serve the next ball.
+-----------------------------------------------------------------------------------
+First, the game draws a small area at the bottom of the applet that serves as
+the control area for the mouse. Moving the mouse pointer into this area
+causes the player's paddle to start tracking the mouse's movement to the
+left or right. To track when the mouse has moved into this area, you need to
+override the mo u s e E n t e r ( ) method, like this:
+
+-----------------------------------------------------------------------------------
